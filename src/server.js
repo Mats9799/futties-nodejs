@@ -1,9 +1,18 @@
-var config = require("./config/config.json");
-var express = require("express");
-//var routes = require('./routes/api_v1.js');
+const bodyParser = require('body-parser')
+const config = require("../config/config.json");
+const express = require("express");
+const playerRoutes = require('./api/player.routes');
+const app = express();
 
-var app = express();
-var requestId = 0;
+let requestId = 0;
+
+app.use(bodyParser.json());
+app.use(bodyParser.json({
+    type: 'application/vnd.api+json'
+}));
+app.use(bodyParser.urlencoded({
+    'extended': 'true'
+}));
 
 // Errorhandler voor express-jwt errors
 // Wordt uitgevoerd wanneer err != null; anders door naar next().
@@ -17,14 +26,14 @@ app.use(function(err, req, res, next) {
     res.status(401).send(error);
 });
 
-app.use("*", function(req, res, next) {
+app.use('*', function(req, res, next) {
     var date = new Date();
     console.log('[' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds() + '] Captured request ' + ++ requestId);
     next();
 });
 
-//Gebruik de routers
-//app.use('/api/v1', routes);
+//Gebruik de players router
+app.use('/api/v1/players', playerRoutes);
 
 //Fallback - als geen enkele andere route slaagt wordt deze uitgevoerd.
 app.use('*', function(req, res) {

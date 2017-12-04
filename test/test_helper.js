@@ -14,7 +14,7 @@ before((done) => {
         });
 });
 
-beforeEach((done) => {
+afterEach((done) => {
     mongoose.connection.collections['clubs'].drop(() => {
         mongoose.connection.collections['players'].drop(() => {
             //Ready to run the next test

@@ -1,5 +1,5 @@
 const assert = require('assert');
-const Player = require('../src/player');
+const Player = require('../src/model/player');
 
 describe('Creating player records', () => {
     it('saves a player', (done) => {

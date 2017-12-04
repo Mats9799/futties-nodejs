@@ -1,5 +1,6 @@
 const assert = require('assert');
-const Club = require('../src/club');
+const Club = require('../src/model/club');
+const Player = require('../src/model/player');
 
 describe('Creating club records', () => {
     it('saves a club', (done) => {
@@ -17,10 +18,17 @@ describe('Creating club records', () => {
 
 describe('Reads clubs from the database', () => {
     let testClub;
+    let testPlayer;
 
     beforeEach((done) => {
+        testPlayer = new Player({
+           name: 'Test'
+        });
         testClub = new Club({
-            name: 'Test'
+            name: 'Test',
+            players: [
+                testPlayer
+            ]
         });
         testClub.save()
             .then(() => done());
