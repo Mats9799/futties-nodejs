@@ -1,0 +1,17 @@
+{
+  "name": "futties-nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "nodemon --exec mocha -R min"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "mongoose": "^4.13.6",
+    "nodemon": "^1.12.1"
+  }
+}

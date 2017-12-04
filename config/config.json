@@ -1,0 +1,4 @@
+{
+  "address": "mongodb://localhost/futties",
+  "port": 3000
+}
