@@ -13,6 +13,7 @@
     "express": "^4.16.2",
     "mocha": "^4.0.1",
     "mongoose": "^4.13.6",
+    "mongoose-id-validator": "^0.4.3",
     "nodemon": "^1.12.1"
   }
 }

@@ -1,6 +1,8 @@
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 const config = require("../config/config.json");
 const express = require("express");
+const mongo = require('./mongo');
+const clubRoutes = require('./api/club.routes');
 const playerRoutes = require('./api/player.routes');
 const app = express();
 
@@ -33,7 +35,8 @@ app.use('*', function(req, res, next) {
 });
 
 //Gebruik de players router
-app.use('/api/v1/players', playerRoutes);
+app.use('/api/v1', clubRoutes);
+app.use('/api/v1', playerRoutes);
 
 //Fallback - als geen enkele andere route slaagt wordt deze uitgevoerd.
 app.use('*', function(req, res) {

@@ -3,62 +3,117 @@ const Club = require('../src/model/club');
 const Player = require('../src/model/player');
 
 describe('Creating club records', () => {
-    it('saves a club', (done) => {
-        const newClub = new Club({
-            name: 'Test'
-        });
+    let club, player;
 
-        newClub.save()
+    beforeEach((done) => {
+        player = new Player({
+            name: 'Player'
+        });
+        player.save()
             .then(() => {
-                assert(!newClub.isNew);
-                done();
+                club = new Club({
+                    name: 'Club',
+                    players: [
+                        player
+                    ]
+                });
+                club.save()
+                    .then(() => done());
+            });
+    });
+
+    it('saves a club', (done) => {
+        player.save()
+            .then(() => {
+                club.save()
+                    .then(() => {
+                        assert(!club.isNew);
+                        done();
+                    });
             });
     });
 });
 
 describe('Reads clubs from the database', () => {
-    let testClub;
-    let testPlayer;
+    let club, player;
 
     beforeEach((done) => {
-        testPlayer = new Player({
-           name: 'Test'
+        player = new Player({
+            name: 'Player'
         });
-        testClub = new Club({
-            name: 'Test',
-            players: [
-                testPlayer
-            ]
-        });
-        testClub.save()
-            .then(() => done());
+        player.save()
+            .then(() => {
+                club = new Club({
+                    name: 'Club',
+                    players: [
+                        player
+                    ]
+                });
+                club.save()
+                    .then(() => done());
+            });
     });
 
     it('find all clubs with a name', (done) => {
-        Club.find({ name: 'Test' })
+        Club.find({ name: 'Club' })
             .then((clubs) => {
-                assert(clubs[0]._id.toString() === testClub._id.toString());
+                assert(clubs[0]._id.toString() === club._id.toString());
                 done();
             });
     });
 
     it('find a club with a certain id', (done) => {
-        Club.findOne({ _id: testClub._id })
+        Club.findOne({ _id: club._id })
             .then((club) => {
-                assert(club.name === 'Test');
+                assert(club.name === 'Club');
                 done();
             });
     });
+
+    it('find a club with a certain player', (done) => {
+        const clubId = club._id;
+        const playerId = player._id;
+
+        Club.findOne({
+            players: { $in: [
+                playerId
+            ]}
+        }).then((club) => {
+            assert(club._id.toString() === clubId.toString());
+            done();
+        });
+    });
+
+    it('find a club with at least 1 player', (done) => {
+        const clubId = club._id;
+
+        Club.findOne({ $where: '(this.players.length > 0)'})
+            .then((club) => {
+                assert(club._id.toString() === clubId.toString());
+                done();
+            });
+    })
 });
 
 describe('Updating a player record', () => {
-    var newName = 'Dummy';
-    var testClub;
+    let newName = 'Dummy';
+    let club, player;
 
     beforeEach((done) => {
-        testClub = new Club({ name: 'Test' });
-        testClub.save()
-            .then(() => done());
+        player = new Player({
+            name: 'Player'
+        });
+        player.save()
+            .then(() => {
+                club = new Club({
+                    name: 'Club',
+                    players: [
+                        player
+                    ]
+                });
+                club.save()
+                    .then(() => done());
+            });
     });
 
     function assertName(name, operation, done) {
@@ -72,39 +127,50 @@ describe('Updating a player record', () => {
     }
 
     it('instance type using set n\' save', (done) => {
-        testClub.set('name', newName);
-        assertName(newName, testClub.save(), done);
+        club.set('name', newName);
+        assertName(newName, club.save(), done);
     });
 
     it('model instance can update', (done) => {
-        assertName(newName, testClub.update({name: newName}), done);
+        assertName(newName, club.update({name: newName}), done);
     });
 
     it('model class can update', (done) => {
-        assertName(newName, Club.update({name: 'Test'}, {name: newName}), done);
+        assertName(newName, Club.update({name: 'Club'}, {name: newName}), done);
     });
 
     it('model class can update one record', (done) => {
-        assertName(newName, Club.findOneAndUpdate({name: 'Test'}, {name: newName}), done);
+        assertName(newName, Club.findOneAndUpdate({name: 'Club'}, {name: newName}), done);
     });
 
     it('model class can find a record by id and update', (done) => {
-        assertName(newName, Club.findByIdAndUpdate(testClub._id, {name: newName}), done);
+        assertName(newName, Club.findByIdAndUpdate(club._id, {name: newName}), done);
     });
 });
 
 describe('Deleting a user', () => {
-    var name = 'Test';
-    var testClub;
+    let name = 'Club';
+    let club, player;
 
     beforeEach((done) => {
-        testClub = new Club({name: name});
-        testClub.save()
-            .then(() => done());
+        player = new Player({
+            name: 'Player'
+        });
+        player.save()
+            .then(() => {
+                club = new Club({
+                    name: name,
+                    players: [
+                        player
+                    ]
+                });
+                club.save()
+                    .then(() => done());
+            });
     });
 
     it ('model instance remove', (done) => {
-        testClub.remove()
+        club.remove()
             .then(() => Club.findOne({name: name}))
             .then((club) => {
                 assert(club === null);
@@ -131,7 +197,7 @@ describe('Deleting a user', () => {
     });
 
     it ('class method findByIdAndRemove', (done) => {
-        Club.findByIdAndRemove(testClub._id)
+        Club.findByIdAndRemove(club._id)
             .then(() => Club.findOne({name: name}))
             .then((club) => {
                 assert(club === null);
