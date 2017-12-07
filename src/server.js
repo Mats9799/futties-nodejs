@@ -4,6 +4,7 @@ const express = require("express");
 const mongo = require('./mongo');
 const clubRoutes = require('./api/club.routes');
 const playerRoutes = require('./api/player.routes');
+const teamRoutes = require('./api/team.routes');
 const app = express();
 
 let requestId = 0;
@@ -52,6 +53,7 @@ app.use('*', function(req, res, next) {
 //Gebruik de players router
 app.use('/api/v1', clubRoutes);
 app.use('/api/v1', playerRoutes);
+app.use('/api/v1', teamRoutes);
 
 //Fallback - als geen enkele andere route slaagt wordt deze uitgevoerd.
 app.use('*', function(req, res) {
