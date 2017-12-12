@@ -1,4 +1,11 @@
 {
-  "address": "mongodb://localhost/futties",
+  "mongo": {
+    "address": "mongodb://localhost/futties"
+  },
+  "neo4j": {
+    "address": "https://hobby-gckbeblfobflgbkebenigjal.dbs.graphenedb.com:24780",
+    "password": "b.jw03G9VWriVH.rwYgX0ozZLJzItnS",
+    "username": "admin"
+  },
   "port": 3000
 }

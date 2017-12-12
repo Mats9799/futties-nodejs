@@ -14,6 +14,7 @@
     "mocha": "^4.0.1",
     "mongoose": "^4.13.6",
     "mongoose-id-validator": "^0.4.3",
+    "neo4j-driver": "^1.5.1",
     "nodemon": "^1.12.1"
   }
 }
