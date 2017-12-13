@@ -1,5 +1,5 @@
 const bodyParser = require('body-parser');
-const config = require("../config/config.json");
+const config = require("../src/db/env");
 const express = require("express");
 const mongo = require('./db/mongo');
 const clubRoutes = require('./api/club.routes');
@@ -63,8 +63,8 @@ app.use('*', function(req, res) {
     });
 });
 
-app.listen(config.port, function() {
-    console.log("Server is listening to port " + config.port);
+app.listen(config.env.webPort, function() {
+    console.log("Server is listening to port " + config.env.webPort);
 });
 
 module.exports = app;
