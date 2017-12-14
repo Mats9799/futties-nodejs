@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const session = require('../db/neo4j');
 const Player = require('../model/player');
 
 // Get alle players
@@ -44,6 +45,14 @@ router.post('/players', function(req, res) {
         if (err) {
             return res.send(err);
         }
+        session.run("CREATE (player:Player {" +
+            "name: '" + req.body.name + "'," +
+            "age: '" + req.body.age + "'" +
+            "}) RETURN player;")
+            .then(function (result) {
+                session.close();
+                res.send(result);
+            });
         res.send(result);
     });
 });
