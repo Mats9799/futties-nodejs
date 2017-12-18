@@ -2,6 +2,7 @@ const bodyParser = require('body-parser');
 const config = require("../src/db/env");
 const express = require("express");
 const mongo = require('./db/mongo');
+const academyRoutes = require('./api/academy.routes');
 const clubRoutes = require('./api/club.routes');
 const playerRoutes = require('./api/player.routes');
 const teamRoutes = require('./api/team.routes');
@@ -50,7 +51,8 @@ app.use('*', function(req, res, next) {
     next();
 });
 
-//Gebruik de players router
+//Gebruik de routers
+app.use('/api/v1', academyRoutes);
 app.use('/api/v1', clubRoutes);
 app.use('/api/v1', playerRoutes);
 app.use('/api/v1', teamRoutes);

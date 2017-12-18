@@ -45,7 +45,6 @@ router.post('/players', function(req, res) {
         if (err) {
             return res.send(err);
         }
-        console.log(result._id);
         session.run("CREATE (player:Player {id:'" + result._id + "'}) RETURN player;")
             .then(function (result) {
                 session.close();
