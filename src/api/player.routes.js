@@ -45,15 +45,12 @@ router.post('/players', function(req, res) {
         if (err) {
             return res.send(err);
         }
-        session.run("CREATE (player:Player {" +
-            "name: '" + req.body.name + "'," +
-            "age: '" + req.body.age + "'" +
-            "}) RETURN player;")
+        console.log(result._id);
+        session.run("CREATE (player:Player {id:'" + result._id + "'}) RETURN player;")
             .then(function (result) {
                 session.close();
                 res.send(result);
             });
-        res.send(result);
     });
 });
 

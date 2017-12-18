@@ -4,4 +4,5 @@ const mongoose = require('mongoose');
 
 // Maak een verbinding met de mongo database
 mongoose.Promise = global.Promise;
-mongoose.connect(env.dburl);
+//mongoose.connect(env.dburl);
+mongoose.connect('mongodb://localhost/futties');
